@@ -120,18 +120,7 @@ slug: ready
     <p class="spinner">We're preparing your Instance...</p>
 
     <div class="start-guide" style="display: none">
-        <p>Your Instance is ready. Click <a class="link-to-instance" href="#" target="_blank">here</a> to see it.</p>
-        <ol>
-            <li>
-                Download <a target="_blank"
-                            href="https://www.npmjs.com/package/@platform-os/marketplace-kit">marketplace-kit</a>.
-                Then, run following commands in your terminal:
-            </li>
-            <li><code>marketplace-kit env add demo --email demo@platform-os.com --url <span class="insert-url"></span>
-                --token
-                <span class="insert-token"></span></code></li>
-            <li><code>marketplace-kit deploy demo --token <span class="insert-token"></span></code></li>
-        </ol>
+        <p>Your Instance is ready. Click <a class="link-to-instance" href="#">here</a> to see it.</p>
     </div>
 </div>
 
@@ -153,25 +142,24 @@ slug: ready
     };
 
     var checkIfReady = function () {
-        url = instanceUrl();
+        var url = instanceUrl();
+        url = url + '&url=' + url;
         console.log('Waiting for ', url);
-        fetch(url).catch((error) => {
-            if (error.message === 'Failed to fetch') { // blocked by CORS policy
-                // document.location = instanceUrl();
+        fetch(url).then((response) => {
+            if (response.status === 200) {
+                document.location = url;
                 $('.link-to-instance').attr({href: url});
                 $('.spinner').hide();
-                $('.start-guide').css({display: 'inline'});
-                $('.insert-token').text(token());
-                $('.insert-url').text(url);
+		$('.start-guide').css({display: 'inline'});
                 if (interval) {
                     clearInterval(interval);
                 }
             }
-        });
+	}).catch((error) => { console.log('Not ready yet...')});
     };
 
     var instanceUrl = function () {
-        return $.urlParam('url') + '/getting-started';
+        return $.urlParam('url') + '/getting-started?token=' + token();
     };
 
     var token = function () {
