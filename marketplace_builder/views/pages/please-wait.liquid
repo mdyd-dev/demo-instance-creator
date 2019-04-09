@@ -1,0 +1,58 @@
+---
+slug: please-wait
+---
+<style>
+    .logo {
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            background-color: #005D48;
+        }
+        50% {
+            background-color: #00AE43;
+        }
+        100% {
+            background-color: #005D48;
+        }
+    }
+</style>
+
+<p class="spinner">We're preparing your Instance...</p>
+
+<div class="start-guide" style="display: none">
+    <p>Your Instance is ready. Click <a class="link-to-instance" href="#">here</a> to see it.</p>
+</div>
+
+<script type="text/javascript">
+    var interval = null;
+
+    var checkIfReady = function () {
+        var url = instanceUrl();
+        url = url + '&url=' + url;
+        console.log('Waiting for ', url);
+        fetch(url).then((response) => {
+            if (response.status === 200) {
+                document.location = url;
+                $('.link-to-instance').attr({href: url});
+                $('.spinner').hide();
+                $('.start-guide').css({display: 'inline'});
+                if (interval) {
+                    clearInterval(interval);
+                }
+            }
+        }).catch((error) => {
+            console.log('Not ready yet...')
+        });
+    };
+
+    var instanceUrl = function () {
+        return "{{ params.url }}/getting-started?token={{ params.token }}";
+    };
+
+    checkIfReady();
+    interval = setInterval(checkIfReady, 5000);
+</script>
+</body>
+</html>
