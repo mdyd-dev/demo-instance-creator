@@ -42,11 +42,16 @@ slug: /
     {% assign env = params.env %}
 {% endif %}
 
+<h2>Welcome to the platformOS 1-Click<br/>Demo Instance Creator!</h2>
+
+<p>Clicking on the <b>Create Demo Instance</b> button will create a fully functional demo site for you by deploying the default platformOS codebase with a simple layout to a demo Instance URL.</p>
+<p>
 <form method="post" action="{{ env }}/demo">
     <input type="hidden" name="redirect_to"
            value="https://demo-instance-creator.prod01.oregon.platform-os.com/please-wait"/>
     <p><input class="button" type="submit" value="Create Demo Instance"/></p>
 </form>
+</p>
 
 </body>
 </html>
